@@ -16,4 +16,13 @@
       android:gravity="center_horizontal"
         />
 
+  <FrameLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/mapFrameLayout"
+    android:layout_margin="10dp"
+    android:gravity="center_horizontal"
+        />
+
+
 </LinearLayout>

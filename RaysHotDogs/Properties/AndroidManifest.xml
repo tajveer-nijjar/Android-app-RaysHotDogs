@@ -3,5 +3,19 @@
 	<uses-sdk android:minSdkVersion="16" />
 	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="com.companyname.rayshotdogs.permission.MAP_RECEIVE" />
+	<permission android:name="com.companyname.rayshotdogs.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
+	<uses-permission android:name="androir.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="androir.permission.ACCESS_FINE_LOCATION" />
+	<application android:icon="@drawable/Icon">
+		<!--Put your Google Maps V2 API key here-->
+		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBFFPneL4-gYgFdX1K0hQcoUiqbKZcmPzA" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+	</application>
 	<application android:label="RaysHotDogs"></application>
 </manifest>

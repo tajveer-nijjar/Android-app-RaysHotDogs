@@ -1,113 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RaysHotDogs.Core.Model;
 
 namespace RaysHotDogs.Core.Repository
 {
     public class HotDogRepository
     {
-        private static List<HotDodGroup> hotDodGroups = new List<HotDodGroup> ()
+        private static List<HotDodGroup> hotDodGroups = new List<HotDodGroup> ();
+
+         string url = 
+            "http://gillcleerenpluralsight.blob.core.windows.net/files/hotdogs.json";
+
+        public HotDogRepository ()
         {
-            new HotDodGroup ()
+            Task.Run (() => this.LoadDataAsync (url)).Wait ();
+        }
+
+        private async Task LoadDataAsync (string uri)
+        {
+            if (hotDodGroups != null)
             {
-                HotDogGroupId = 1,
-                Title = "Meat Lovers",
-                ImagePath = "",
-                HotDogs = new List<HotDog> ()
+                string responseJsonString = null;
+
+                using (var httpClient = new HttpClient ())
                 {
-                    new HotDog ()
+                    try
                     {
-                        HotDogId = 1,
-                        Name = "Regular Hot Dog",
-                        ShortDescription = "The best one",
-                        Description = "Smelly cheese with danish touch",
-                        ImagePath = "hotdog1",
-                        IsAvailable = true,
-                        PrepTime = 10,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 2,
-                        IsFavorite = true
-                    },
-                    new HotDog ()
-                    {
-                        HotDogId = 2,
-                        Name = "HauteHot Dog",
-                        ShortDescription = "The classic one",
-                        Description = "Bacon and shit",
-                        ImagePath = "hotdog2",
-                        IsAvailable = true,
-                        PrepTime = 15,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 3,
-                        IsFavorite = false
-                    },
-                    new HotDog ()
-                    {
-                        HotDogId = 3,
-                        Name = "Extra Long Hot Dog",
-                        ShortDescription = "For big tummy",
-                        Description = "Smelly cheese with danish touch",
-                        ImagePath = "hotdog3",
-                        IsAvailable = true,
-                        PrepTime = 10,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 4,
-                        IsFavorite = true
+                        Task<HttpResponseMessage> getResponse = httpClient.GetAsync (uri);
+
+                        HttpResponseMessage response = await getResponse;
+
+                        responseJsonString = await response.Content.ReadAsStringAsync ();
+
+                        hotDodGroups = JsonConvert.DeserializeObject<List<HotDodGroup>> (responseJsonString);
                     }
-                }
-            },
-            new HotDodGroup ()
-            {
-                HotDogGroupId = 2,
-                Title = "Veggie Lovers",
-                ImagePath = "",
-                HotDogs = new List<HotDog> ()
-                {
-                    new HotDog ()
+                    catch (Exception)
                     {
-                        HotDogId = 4,
-                        Name = "Veggie Regular Hot Dog",
-                        ShortDescription = "The best one",
-                        Description = "Smelly cheese with danish touch",
-                        ImagePath = "hotdog1",
-                        IsAvailable = true,
-                        PrepTime = 10,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 2,
-                        IsFavorite = true
-                    },
-                    new HotDog ()
-                    {
-                        HotDogId = 5,
-                        Name = "Vegie HauteHot Dog",
-                        ShortDescription = "The classic one",
-                        Description = "Bacon and shit",
-                        ImagePath = "hotdog2",
-                        IsAvailable = true,
-                        PrepTime = 15,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 3,
-                        IsFavorite = false
-                    },
-                    new HotDog ()
-                    {
-                        HotDogId = 6,
-                        Name = "Vegie Extra Long Hot Dog",
-                        ShortDescription = "For big tummy",
-                        Description = "Smelly cheese with danish touch",
-                        ImagePath = "hotdog3",
-                        IsAvailable = true,
-                        PrepTime = 10,
-                        Ingredients = new List<string> () {"Regular bun", "Saucage", "Ketchup" },
-                        Price = 4,
-                        IsFavorite = true
+                        
+                        throw;
                     }
                 }
             }
-        };
+        }
 
         public List<HotDog> GetAllHotDogs ()
         {
